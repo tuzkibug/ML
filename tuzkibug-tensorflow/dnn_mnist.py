@@ -43,7 +43,7 @@ def train(mnist):
     average_y = inference(x, variable_averages, weights1, biases1, weights2, biases2)
 
     # 计算交叉熵作为损失函数。tf.argmax(y_, 1) 返回一个数组中最大值的下标，这个下标在这里这好是0-9的数字编号
-    cross_entropy = tf.nn.sparse_softmax_cross_entropy_with_logits(y, tf.argmax(y_, 1))
+    cross_entropy = tf.nn.sparse_softmax_cross_entropy_with_logits(logits=y, labels=tf.argmax(y_, 1))
     cross_entropy_mean = tf.reduce_mean(cross_entropy)
 
     # 计算正则化参数，并与交叉熵相加，计算总损失
@@ -65,7 +65,7 @@ def train(mnist):
 
     with tf.Session() as sess:
         tf.initialize_all_variables().run()
-        validate_feed = {x:mnist.validation.images, y:mnist.validation.labels}
+        validate_feed = {x:mnist.validation.images, y_:mnist.validation.labels}
         test_feed = {x:mnist.test.images, y_:mnist.test.labels}
         for i in range(TRAINING_STEPS):
             if i % 1000 == 0:
@@ -80,7 +80,7 @@ def train(mnist):
 
 
 def main(argv=None):
-    mnist = input_data.read_data_sets("/tmp/data", one_hot=True)
+    mnist = input_data.read_data_sets("MNIST_data", one_hot=True)
     train(mnist)
 
 
